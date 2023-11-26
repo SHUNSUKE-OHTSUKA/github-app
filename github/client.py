@@ -1,0 +1,50 @@
+import time
+import jwt
+import requests
+import json
+import logging
+
+class App:
+    def __init__(self,app_id,installation_id,pem):
+        self.app_id = app_id
+        self.pem = pem
+        self.installation_id = installation_id
+        self.token_header = self.__get_token_header()
+        logging.info('token_header : ' + str(self.token_header))
+
+    def __generate_jwt(self):
+        payload = {
+            'iat': int(time.time()),
+            'exp': int(time.time()) + 300,
+            'iss': self.app_id,
+        }
+        return jwt.encode(payload, self.pem, algorithm='RS256')
+
+    def __get_headers(self):
+        jwt = self.__generate_jwt()
+        return {
+            'Authorization': 'Bearer {}'.format(jwt),
+            'Accept': 'application/vnd.github+json',
+        }
+
+    def __get_token(self):
+        url = 'https://api.github.com/app/installations/{}/access_tokens'.format(
+            str(self.installation_id))
+        response = requests.post(url, headers=self.__get_headers())
+        return json.loads(response.text).get('token')
+    
+    def __get_token_header(self):
+        token = self.__get_token()
+        return {
+            'Authorization': 'token {}'.format(token),
+            'Accept': 'application/vnd.github.inertia-preview+json',
+        }
+    
+    def workflow(self, owner, repo, ref, inputs, workflow_id):
+        url = 'https://api.github.com/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches'.format(
+            owner=owner, repo=repo, workflow_id=workflow_id)
+        payload = json.dumps({
+            'ref': ref,
+            'inputs': inputs
+        })
+        return requests.post(url, payload, headers=self.token_header)

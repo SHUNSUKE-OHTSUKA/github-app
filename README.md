@@ -12,6 +12,8 @@
 
 ## 実行方法
 
+### ローカル
+
 1. ローカルにレポジトリをクローンする
 1. 依存パッケージをインストールする
     ```
@@ -25,3 +27,9 @@
     ```
     python localhost.py
     ```
+
+### GitHub
+
+1. Actionsを実行する
+
+    * https://github.com/SHUNSUKE-OHTSUKA/github-app/actions/workflows/trigger-workflow.yml

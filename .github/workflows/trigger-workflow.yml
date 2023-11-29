@@ -8,12 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/create-github-app-token@v1
+      
+      - name: auth github app
+        uses: actions/create-github-app-token@v1
         id: generate-token
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
-      - name: Set secrets
+      
+      - name: run workflow
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |

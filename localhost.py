@@ -10,15 +10,18 @@ load_dotenv()
 
 # 環境変数から設定を読み込む
 app_id = os.getenv('APP_ID')
-installation_id = os.getenv('INSTALLATION_ID')
-pem = os.getenv('PEM')
+org = os.getenv('ORG')
+private_key = os.getenv('PRIVATE_KEY')
 
 def main():
-    app = App(app_id, installation_id, pem)
+    app = App(
+        app_id = app_id,
+        org = org,
+        private_key = private_key
+    )
     
     # https://github.com/SHUNSUKE-OHTSUKA/github-app/actions/workflows/starter-workflow.yml
     response = app.workflow(
-        owner='SHUNSUKE-OHTSUKA',
         repo='github-app',
         ref = 'main',
         inputs= {},

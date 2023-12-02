@@ -27,6 +27,12 @@
     ```
     python localhost.py
     ```
+    
+    参考 : 実行Log
+    ```
+    INFO:root:token_header : {'Authorization': 'token ghs_xxxx', 'Accept': 'application/vnd.github.inertia-preview+json'}
+    INFO:root:status_code : 204
+    ```
 
 ### GitHub
 
